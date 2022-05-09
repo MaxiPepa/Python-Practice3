@@ -1,6 +1,9 @@
 """Variables de Clase y Métodos de Clase."""
 
 
+from mailbox import NoSuchMailboxError
+
+
 class Article:
     """Todos los artículos tienen un nombre y un costo, opcionalmente algunos
     tienen un porcentaje de descuento.
@@ -20,6 +23,21 @@ class Article:
         - No utilizar Properties
         - Utilizar Type Hints en todos los métodos y variables
     """
+    __iva = float(0.21)
+
+    def __init__(self, nombre, costo, descuento = 0):
+        self.nombre = str(nombre)
+        self.costo = float(costo)
+        self.descuento = float(descuento)
+
+    def calcular_precio(self) -> float:
+        precio_iva = round(self.costo + (self.costo * self.__iva), 2)
+        total = round(precio_iva - precio_iva * self.descuento, 2)
+        return total
+
+    @classmethod
+    def actualizar_iva(self, new_iva):
+        self.__iva = new_iva
 
 
 # NO MODIFICAR - INICIO
