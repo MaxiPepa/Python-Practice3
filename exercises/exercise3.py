@@ -21,6 +21,7 @@ class Article:
         self.costo = float(costo)
         self.descuento = float(descuento)
 
+    @property
     def precio(self) -> float:
         precio_iva = round(self.costo + (self.costo * self.__iva), 2)
         total = round(precio_iva - precio_iva * self.descuento, 2)
@@ -57,7 +58,6 @@ try:
     assert False, "No se puede modificar el precio"
 except AttributeError:
     assert True
-
 
 # Test básico
 article = Article("Auto", 1)
