@@ -4,10 +4,10 @@ contribuyentes, por ejemplo, el Monotributista y el que es Empleado en relación
 de dependencia. Ambos están dentro del sistema pero pagan diferentes impuestos.
 
 El monotributista tiene que pagar en función de sus ingresos brutos anuales:
-    - Si son menores a $370.000, paga $2646,22 mensuales
-    - Si son menores a $550.000, paga $2958,95 mensuales
-    - Si son menores a $770.000, paga $3382,62 mensuales
-    - Si son mayores a $770.000, paga $3988,85 mensuales
+    - Si son menores a $370.000 (30.833), paga $2646,22 mensuales
+    - Si son menores a $550.000 (45.833), paga $2958,95 mensuales
+    - Si son menores a $770.000 (64.167), paga $3382,62 mensuales
+    - Si son mayores a $770.000 (64.167), paga $3988,85 mensuales
 
 En el caso de los empleados en relación de dependencia, ellos pagan un 17% de
 impuestos sobre sus ingresos brutos mensuales.
@@ -37,10 +37,43 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List
 
+class Contribuyente(ABC):
+    @abstractmethod
+    def calcular_sueldo(self) -> float:
+        pass
+
+@dataclass
+class Empleado(Contribuyente):
+    salario: float
+
+    def calcular_sueldo(self) -> float:
+        resta = (self.salario * 17) / 100
+        sueldo = self.salario - resta
+        return sueldo
+
+@dataclass
+class Monotributista(Contribuyente):
+    salario: float
+
+    def calcular_sueldo(self) -> float:
+        if self.salario * 12 < 370000:
+            resta = 2646.22
+        elif self.salario * 12 < 550000:
+            resta = 2958.95
+        elif self.salario * 12 < 770000:
+            resta = 3382.62
+        else:
+            resta = 3988.85
+        sueldo = self.salario - resta
+        return sueldo
 
 def calcular_sueldos(contribuyentes: List[Contribuyente]):
     """Data una lista de contribuyentes, devuelve una lista de los sueldos de
     cada uno."""
+    sueldos = []
+    for x in contribuyentes:
+        sueldos.append(x.calcular_sueldo())
+    return sueldos
 
 
 # NO MODIFICAR - INICIO
